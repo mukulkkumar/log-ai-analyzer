@@ -10,6 +10,7 @@ from config import settings
 import mixins
 import os
 import shutil
+import re
 
 
 router = APIRouter(prefix="/log", tags=["Log"])
@@ -120,4 +121,52 @@ async def ask_log(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ask failed: {str(e)}")
+
+@router.get("/total-logs")
+async def get_total_logs():
+    """
+    Returns the total number of log entries across all log files in the UPLOAD_DIR.
+    Each log entry is counted by lines starting with a timestamp like '10-Nov-23 13:44:02'.
+    """
+    try:
+        total_logs = 0
+        # Regex for lines starting with date like 10-Nov-23 13:44:02
+        log_line_regex = re.compile(r"^\d{2}-[A-Za-z]{3}-\d{2} \d{2}:\d{2}:\d{2}")
+
+        log_files = [
+            f for f in os.listdir(UPLOAD_DIR)
+            if os.path.isfile(os.path.join(UPLOAD_DIR, f))
+        ]
+        for filename in log_files:
+            file_path = os.path.join(UPLOAD_DIR, filename)
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                for line in f:
+                    if log_line_regex.match(line):
+                        total_logs += 1
+        return {"total_logs": total_logs, "files_counted": len(log_files)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to count logs: {str(e)}")
+
+@router.get("/total-debug")
+async def get_total_debug():
+    """
+    Returns the total number of DEBUG lines across all log files in the UPLOAD_DIR.
+    """
+    try:
+        total_debug = 0
+        debug_regex = re.compile(r"\bDEBUG\b", re.IGNORECASE)
+
+        log_files = [
+            f for f in os.listdir(UPLOAD_DIR)
+            if os.path.isfile(os.path.join(UPLOAD_DIR, f))
+        ]
+        for filename in log_files:
+            file_path = os.path.join(UPLOAD_DIR, filename)
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                for line in f:
+                    if debug_regex.search(line):
+                        total_debug += 1
+        return {"total_debug": total_debug, "files_counted": len(log_files)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to count DEBUG lines: {str(e)}")
 

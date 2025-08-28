@@ -1,4 +1,6 @@
-import React from "react";
+"use client"
+
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 
 // Simple bar chart using SVG (no external dependencies)
@@ -119,6 +121,34 @@ const LineChart = () => {
 };
 
 export default function DashboardPage() {
+    const [totalLogs, setTotalLogs] = useState<number | null>(null);
+    const [totalDebug, setTotalDebug] = useState<number | null>(null);
+
+    useEffect(() => {
+        async function fetchTotalLogs() {
+            try {
+                const res = await fetch("http://localhost:8000/log/total-logs");
+                if (!res.ok) throw new Error("Failed to fetch total logs");
+                const data = await res.json();
+                setTotalLogs(data.total_logs);
+            } catch {
+                setTotalLogs(null);
+            }
+        }
+        async function fetchTotalDebug() {
+            try {
+                const res = await fetch("http://localhost:8000/log/total-debug");
+                if (!res.ok) throw new Error("Failed to fetch total debug");
+                const data = await res.json();
+                setTotalDebug(data.total_debug);
+            } catch {
+                setTotalDebug(null);
+            }
+        }
+        fetchTotalLogs();
+        fetchTotalDebug();
+    }, []);
+
     return (
         <DashboardLayout>
             <main className="p-1">
@@ -132,7 +162,9 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white shadow rounded-lg p-6">
                         <h2 className="text-xl font-semibold mb-2">Total Logs</h2>
-                        <p className="text-3xl font-bold text-blue-600">12,345</p>
+                        <p className="text-3xl font-bold text-blue-600">
+                            {totalLogs !== null ? totalLogs : <span className="text-base text-gray-400">Loading...</span>}
+                        </p>
                     </div>
                     <div className="bg-white shadow rounded-lg p-6">
                         <h2 className="text-xl font-semibold mb-2">Errors Today</h2>
@@ -140,7 +172,9 @@ export default function DashboardPage() {
                     </div>
                     <div className="bg-white shadow rounded-lg p-6">
                         <h2 className="text-xl font-semibold mb-2">Warnings</h2>
-                        <p className="text-3xl font-bold text-yellow-500">87</p>
+                        <p className="text-3xl font-bold text-yellow-500">
+                            {totalDebug !== null ? totalDebug : <span className="text-base text-gray-400">Loading...</span>}
+                        </p>
                     </div>
                 </div>
                 <section className="bg-white shadow rounded-lg p-6">
