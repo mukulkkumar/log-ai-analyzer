@@ -140,7 +140,7 @@ export default function DashboardLayout({
 
       {/* Footer */}
       <footer className="w-full bg-slate-800 border-t border-slate-700 py-4 px-8 text-center text-slate-300 text-sm shadow fixed bottom-0 left-0 right-0">
-        &copy; {new Date().getFullYear()} Analyser. All rights reserved.
+        &copy; {new Date().getFullYear()} Analyzer. All rights reserved.
       </footer>
     </div>
   );
