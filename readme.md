@@ -5,6 +5,17 @@ The backend is built with FastAPI and the frontend is built with Next.js (React)
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="/frontend/public/log_query.png" alt="Log Query Chat" width="600"/>
+</p>
+<p align="center">
+  <img src="/frontend/public/dashboard.png" alt="Dashboard" width="600"/>
+</p>
+
+---
+
 ## Features
 
 - **User Authentication**: Secure registration, login, and JWT-based authentication.
@@ -19,7 +30,7 @@ The backend is built with FastAPI and the frontend is built with Next.js (React)
 ## Project Structure
 
 <pre>
-f:\Auth_FastAPI_ReactJs\
+d:\ai_analyzer_app\
 │
 ├── backend/
 │   ├── main.py                # FastAPI entry point
