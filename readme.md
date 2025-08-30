@@ -1,86 +1,135 @@
-## FastAPI Authentication Backend
+# AI Log Analyzer
 
-This is a backend authentication service built with FastAPI that supports user registration, login, and JWT-based authentication.
+AI Log Analyzer is a full-stack application for uploading, analyzing, and querying log files using AI (LLM/Langchain) with secure authentication.  
+The backend is built with FastAPI and the frontend is built with Next.js (React) and Tailwind CSS.
 
-# Features
+---
 
-* User registration with password hashing
-* User login with JWT access token generation
-* Protected routes using JWT authentication
-* Modular project structure
-* SQLite database (can be swapped with PostgreSQL/MySQL easily)
+## Features
+
+- **User Authentication**: Secure registration, login, and JWT-based authentication.
+- **Log Upload & Analysis**: Upload log files and get AI-powered analysis and suggestions.
+- **AI Chat for Logs**: Ask questions about your logs and get answers using LLMs (Langchain/OpenAI).
+- **Dashboard**: Visualize log statistics, trends, and recent entries.
+- **Protected API**: All log endpoints require authentication.
+- **Modular, Extensible Codebase**: Easy to add new log sources or analysis features.
+
+---
+
+## Project Structure
 
 <pre>
-backend/
-│── app/
-│   ├── main.py            # Entry point
-│   ├── database.py        # Database connection & Base
-│   ├── models.py          # SQLAlchemy models
-│   ├── schemas.py         # Pydantic schemas (Data validation)
-│   ├── auth.py            # JWT & authentication logic
-│   ├── crud.py            # DB operations
-│   ├── routers/           # Defines API endpoints (auth, users, protected)
-│   │    ├── users.py      # Get about user
-│   │    |── auth.py       # User registration & login routes
-|   |    └── protected.py  # protected routes
-│── requirements.txt
-│── README.md
+f:\Auth_FastAPI_ReactJs\
+│
+├── backend/
+│   ├── main.py                # FastAPI entry point
+│   ├── database.py            # Database connection & models
+│   ├── models.py              # SQLAlchemy models
+│   ├── schemas.py             # Pydantic schemas
+│   ├── auth.py                # JWT & authentication logic
+│   ├── crud.py                # DB operations
+│   ├── routers/
+│   │    ├── users.py          # User info routes
+│   │    ├── auth.py           # Registration & login
+│   │    ├── log.py            # Log upload, analysis, chat, stats
+│   ├── requirements.txt
+│   └── ...
+│
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── layout.tsx     # Root layout
+│   │   │   ├── page.tsx       # Landing page
+│   │   │   ├── dashboard/
+│   │   │   │   ├── layout.tsx # Dashboard layout (sidebar, nav, footer)
+│   │   │   │   ├── page.tsx   # Dashboard main page (graphs, stats)
+│   │   │   ├── log-file/      # Log file upload & analysis
+│   │   │   ├── log-chat/      # AI chat for logs
+│   │   │   └── ...
+│   │   ├── components/
+│   │   │   └── DashboardLayout.tsx
+│   │   └── ...
+│   ├── package.json
+│   └── ...
+│
+└── README.md
 </pre>
 
+---
 
 ## Installation & Setup
 
 ### 1. Clone this repository
 
-```
-git clone https://github.com/yourusername/fastapi-auth-backend.git
-cd fastapi-auth-backend/backend
+```sh
+git clone https://github.com/mukulkkumar/log-ai-analyzer.git
 ```
 
-### 2. Create a virtual environment
+### 2. Backend Setup
 
-```
+```sh
+cd backend
 python -m venv venv
-source venv/bin/activate   # Linux/Mac
-venv\Scripts\activate      # Windows
-```
+# Activate venv:
+# On Linux/Mac:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
 
-### 3. Install dependencies
-```
 pip install -r requirements.txt
-```
-
-### 4. Run the FastAPI server
-
-```
 uvicorn main:app --reload
 ```
 
-### 5. Visit API docs
+- The backend will run at [http://127.0.0.1:8000](http://127.0.0.1:8000)
+- API docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-Open Swagger UI: http://127.0.0.1:8000/docs
+### 3. Frontend Setup
 
-Or ReDoc: http://127.0.0.1:8000/redoc
+```sh
+cd ../frontend
+npm install
+npm run dev
+```
 
+- The frontend will run at [http://localhost:3000](http://localhost:3000)
 
-## API Endpoints
+---
 
-*Auth Routes*
+## API Endpoints (Backend)
 
-POST /register → Register new user
+- **POST /register** – Register a new user
+- **POST /login** – Login and get JWT token
+- **POST /log/upload** – Upload a log file (authenticated)
+- **POST /log/ask** – Ask a question about a log file (AI-powered, authenticated)
+- **GET /log/total-logs** – Get total log entries (authenticated)
+- **GET /log/total-debug** – Get total DEBUG log lines (authenticated)
+- **Other endpoints** – See `/docs` for full API
 
-POST /login → Login and get JWT token
-
-*Protected Routes*
-
-GET /protected/ → Example protected route (requires JWT token in Authorization header)
+---
 
 ## Tech Stack
 
-* FastAPI (backend framework)
+- **Backend:** FastAPI, SQLAlchemy, Pydantic, JWT, Langchain, OpenAI
+- **Frontend:** Next.js (App Router), React, Tailwind CSS
+- **Database:** SQLite (easy to swap for PostgreSQL/MySQL)
+- **Authentication:** JWT (JSON Web Token)
 
-* SQLite + SQLAlchemy (database & ORM)
+---
 
-* JWT (JSON Web Token) (authentication)
+## Usage
 
-* Pydantic (data validation)
+1. **Register and login** to get your JWT token.
+2. **Upload log files** via the dashboard.
+3. **Analyze logs** and view AI-powered suggestions and statistics.
+4. **Chat with your logs** using the AI chat interface.
+5. **View dashboards** for log trends, errors, and debug stats.
+
+---
+
+## License
+
+MIT
+
+---
+
+*Generated by
